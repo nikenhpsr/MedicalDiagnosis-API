@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Pomelo.EntityFrameworkCore.MySql;
 
 public class Startup
@@ -21,7 +22,13 @@ public class Startup
             options.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
             ServerVersion.AutoDetect(Configuration.GetConnectionString("DefaultConnection"))));
 
-    }
+        // Register the Swagger generator
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+        });
+
+        }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -35,6 +42,16 @@ public class Startup
         {
             app.UseExceptionHandler("/Home/Error");
         }
+
+        // Enable middleware to serve generated Swagger as a JSON endpoint
+        app.UseSwagger();
+
+        // Enable middleware to serve swagger-ui
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            c.RoutePrefix = string.Empty; // To serve the Swagger UI at the app's root
+        });
 
         app.UseStaticFiles();
 
