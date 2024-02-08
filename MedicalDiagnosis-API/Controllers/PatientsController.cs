@@ -21,14 +21,14 @@ namespace MedicalDiagnosis_API.Controllers
 
         // GET: api/Patients
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Patient>>> GetPatients()
+        public async Task<ActionResult<IEnumerable<PatientModel>>> GetPatients()
         {
             return await _context.Patients.ToListAsync();
         }
 
         // GET: api/Patients/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Patient>> GetPatient(string id)
+        public async Task<ActionResult<PatientModel>> GetPatient(string id)
         {
             var patient = await _context.Patients.FindAsync(id);
 
@@ -42,7 +42,7 @@ namespace MedicalDiagnosis_API.Controllers
 
         // POST: api/Patients
         [HttpPost]
-        public async Task<ActionResult<Patient>> CreatePatient(Patient patient)
+        public async Task<ActionResult<PatientModel>> CreatePatient(PatientModel patient)
         {
             if (ModelState.IsValid)
             {
@@ -55,7 +55,7 @@ namespace MedicalDiagnosis_API.Controllers
 
         // PUT: api/Patients/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePatient(string id, Patient patient)
+        public async Task<IActionResult> UpdatePatient(string id, PatientModel patient)
         {
             if (id != patient.PatientId)
             {

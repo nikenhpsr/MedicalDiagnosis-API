@@ -22,14 +22,14 @@ namespace MedicalDiagnosis_API.Controllers
 
         // GET: api/Consultations
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Consultation>>> GetConsultations()
+        public async Task<ActionResult<IEnumerable<ConsultationModel>>> GetConsultations()
         {
             return await _context.Consultations.Include(c => c.MedicalInspection).ToListAsync();
         }
 
         // GET: api/Consultations/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Consultation>> GetConsultation(string id)
+        public async Task<ActionResult<ConsultationModel>> GetConsultation(string id)
         {
             var consultation = await _context.Consultations.Include(c => c.MedicalInspection).FirstOrDefaultAsync(m => m.ConsultationId == id);
 
@@ -43,7 +43,7 @@ namespace MedicalDiagnosis_API.Controllers
 
         // POST: api/Consultations
         [HttpPost]
-        public async Task<ActionResult<Consultation>> PostConsultation(Consultation consultation)
+        public async Task<ActionResult<ConsultationModel>> PostConsultation(ConsultationModel consultation)
         {
             _context.Consultations.Add(consultation);
             await _context.SaveChangesAsync();
@@ -53,7 +53,7 @@ namespace MedicalDiagnosis_API.Controllers
 
         // PUT: api/Consultations/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutConsultation(string id, Consultation consultation)
+        public async Task<IActionResult> PutConsultation(string id, ConsultationModel consultation)
         {
             if (id != consultation.ConsultationId)
             {

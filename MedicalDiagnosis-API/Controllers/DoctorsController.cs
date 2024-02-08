@@ -21,14 +21,14 @@ namespace MedicalDiagnosis_API.Controllers
 
         // GET: api/Doctors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Doctor>>> GetDoctors()
+        public async Task<ActionResult<IEnumerable<DoctorModel>>> GetDoctors()
         {
             return await _context.Doctors.ToListAsync();
         }
 
         // GET: api/Doctors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Doctor>> GetDoctor(string id)
+        public async Task<ActionResult<DoctorModel>> GetDoctor(string id)
         {
             var doctor = await _context.Doctors.FindAsync(id);
 
@@ -42,7 +42,7 @@ namespace MedicalDiagnosis_API.Controllers
 
         // POST: api/Doctors
         [HttpPost]
-        public async Task<ActionResult<Doctor>> PostDoctor(Doctor doctor)
+        public async Task<ActionResult<DoctorModel>> PostDoctor(DoctorModel doctor)
         {
             _context.Doctors.Add(doctor);
             await _context.SaveChangesAsync();
@@ -52,7 +52,7 @@ namespace MedicalDiagnosis_API.Controllers
 
         // PUT: api/Doctors/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDoctor(string id, Doctor doctor)
+        public async Task<IActionResult> PutDoctor(string id, DoctorModel doctor)
         {
             if (id != doctor.DoctorId)
             {

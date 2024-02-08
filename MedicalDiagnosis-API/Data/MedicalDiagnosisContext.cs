@@ -1,100 +1,85 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MedicalDiagnosis_API.Models;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 
-namespace MedicalDiagnosis_API.Data
+namespace MedicalDiagnosis_API.Models
 {
-    public class MedicalDiagnosisContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public MedicalDiagnosisContext(DbContextOptions<MedicalDiagnosisContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
-        public DbSet<Speciality> Specialities { get; set; }
-        public DbSet<Doctor> Doctors { get; set; }
-        public DbSet<Patient> Patients { get; set; }
-        public DbSet<Diagnoses> Diagnoses { get; set; }
-        public DbSet<MedicalInspection> MedicalInspections { get; set; }
-        public DbSet<Consultation> Consultations { get; set; }
-        public DbSet<Comment> Comments { get; set; }
+        // Define DbSets for each entity
+        public DbSet<PatientModel> Patients { get; set; }
+        public DbSet<DoctorModel> Doctors { get; set; }
+        public DbSet<SpecialityModel> Specialities { get; set; }
+        public DbSet<InspectionModel> Inspections { get; set; }
+        public DbSet<DiagnosisModel> Diagnoses { get; set; }
+        public DbSet<ConsultationModel> Consultations { get; set; }
+        public DbSet<CommentModel> Comments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Unique constraints, relationships, and other configurations are set up here.
+            base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Comment>()
-                .HasKey(c => c.CommentId);
+            // Configuring the CommentModel to have a self-referencing one-to-many relationship
+            modelBuilder.Entity<CommentModel>()
+                .HasOne(c => c.ParentComment)
+                .WithMany(p => p.InnerComments)
+                .HasForeignKey(c => c.ParentCommentId) // Use the correct property name here
+                .OnDelete(DeleteBehavior.Restrict); // Optional: to prevent cascade delete
 
-            // Relationship between Patient and MedicalInspection
-            modelBuilder.Entity<Patient>()
-                .HasMany(p => p.MedicalInspections)
-                .WithOne(mi => mi.Patient)
-                .HasForeignKey(mi => mi.PatientId);
+            // Configuring the relationship between CommentModel and DoctorModel
+            modelBuilder.Entity<CommentModel>()
+                .HasOne(c => c.Author)
+                .WithMany(d => d.Comments)
+                .HasForeignKey(c => c.AuthorId);
 
-            // Relationship between Doctor and MedicalInspection (as the author)
-            modelBuilder.Entity<Doctor>()
-                .HasMany(d => d.MedicalInspections)
-                .WithOne(mi => mi.Author)
-                .HasForeignKey(mi => mi.AuthorId);
+            // Configuring the one-to-many relationship between ConsultationModel and SpecialityModel
+            modelBuilder.Entity<ConsultationModel>()
+                .HasOne(c => c.Speciality)
+                .WithMany() // Assuming no navigation property back to ConsultationModel
+                .HasForeignKey(c => c.SpecialityId);
 
-            // Relationship between MedicalInspection and Diagnoses
-            modelBuilder.Entity<MedicalInspection>()
-                 .HasMany(mi => mi.MedicalInspectionDiagnoses)
-                 .WithOne(mid => mid.MedicalInspection)
-                 .HasForeignKey(mid => mid.MedicalInspectionId);
+            // Configuring the one-to-many relationship between ConsultationModel and InspectionModel
+            modelBuilder.Entity<ConsultationModel>()
+                .HasOne(c => c.MedicalInspection)
+                .WithMany(i => i.Consultations)
+                .HasForeignKey(c => c.InspectionId);
 
-            modelBuilder.Entity<Diagnoses>()
-                .HasMany(d => d.MedicalInspectionDiagnoses)
-                .WithOne(mid => mid.Diagnoses)
-                .HasForeignKey(mid => mid.DiagnosesId);
+            // Configuring the one-to-many relationship between DiagnosisModel and MedicalInspection
+            modelBuilder.Entity<DiagnosisModel>()
+                .HasOne(d => d.MedicalInspection)
+                .WithMany(m => m.Diagnoses)
+                .HasForeignKey(d => d.MedicalInspectionId);
 
-            // Relationship between MedicalInspection and Consultation
-            modelBuilder.Entity<MedicalInspection>()
-                .HasMany(mi => mi.Consultations)
-                .WithOne(c => c.MedicalInspection)
-                .HasForeignKey(c => c.MedicalInspectionId);
+            // Configuring the one-to-many relationship between MedicalInspection and PatientModel
+            modelBuilder.Entity<InspectionModel>()
+                .HasOne(m => m.Patient)
+                .WithMany(p => p.Inspection)
+                .HasForeignKey(m => m.PatientId);
 
-            // Relationship between Doctor and Consultation (as the commenter)
-            modelBuilder.Entity<Doctor>()
-                .HasMany(d => d.Comments)
-                .WithOne(c => c.CommentAuthor)
-                .HasForeignKey(c => c.CommentAuthorId);
+            // Configuring the one-to-many relationship between MedicalInspection and DoctorModel
+            modelBuilder.Entity<InspectionModel>()
+                .HasOne(m => m.Author)
+                .WithMany(d => d.Inspection)
+                .HasForeignKey(m => m.AuthorId);
 
+            // Enum conversions
+            modelBuilder.Entity<DiagnosisModel>()
+                .Property(d => d.Type)
+                .HasConversion<string>();
 
-            // Configure the self-reference for MedicalInspection if needed
-            modelBuilder.Entity<MedicalInspection>()
-                .HasOne(mi => mi.ParentInspection)
-                .WithMany()
-                .HasForeignKey(mi => mi.ParentInspectionId)
-                .OnDelete(DeleteBehavior.Restrict); // To prevent cascade delete issues
+            modelBuilder.Entity<InspectionModel>()
+                .Property(m => m.Conclusion)
+                .HasConversion<string>();
 
-            modelBuilder.Entity<Diagnoses>()
-                .HasKey(d => d.DiagnosesId);
-
-            modelBuilder.Entity<MedicalInspectionDiagnosis>()
-                .HasKey(mid => new { mid.MedicalInspectionId, mid.DiagnosesId });
-
-            modelBuilder.Entity<MedicalInspectionDiagnosis>()
-                .HasOne(mid => mid.MedicalInspection)
-                .WithMany(mi => mi.MedicalInspectionDiagnoses)
-                .HasForeignKey(mid => mid.MedicalInspectionId);
-
-            modelBuilder.Entity<MedicalInspectionDiagnosis>()
-                 .HasOne(mid => mid.Diagnoses)
-                 .WithMany(d => d.MedicalInspectionDiagnoses)
-                 .HasForeignKey(mid => mid.DiagnosesId);
-
-            // Constraint for MedicalInspection to have exactly one main diagnosis
-            modelBuilder.Entity<MedicalInspection>()
-                .HasCheckConstraint("CK_MedicalInspection_MainDiagnosis",
-                    "SELECT COUNT(*) FROM Diagnoses WHERE TypeInInspection = 'Main' AND MedicalInspectionId = Id GROUP BY MedicalInspectionId HAVING COUNT(*) = 1");
-
-            // Constraint for MedicalInspection based on Conclusion
-            modelBuilder.Entity<MedicalInspection>()
-                .HasCheckConstraint("CK_MedicalInspection_Conclusion_NextVisit",
-                    "([Conclusion] = 'Disease' AND [NextVisitDate] IS NOT NULL) OR ([Conclusion] <> 'Disease')")
-                .HasCheckConstraint("CK_MedicalInspection_Conclusion_DeathDate",
-                    "([Conclusion] = 'Death' AND [DeathDate] IS NOT NULL) OR ([Conclusion] <> 'Death')");
+            // Configuring enums for Gender
+            modelBuilder.Entity<DoctorModel>()
+                .Property(d => d.Gender)
+                .HasConversion<string>();
         }
     }
 }
