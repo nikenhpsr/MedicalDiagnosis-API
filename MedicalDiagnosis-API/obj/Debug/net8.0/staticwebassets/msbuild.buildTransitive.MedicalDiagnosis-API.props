@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\MedicalDiagnosis-API.props" />
+</Project>
