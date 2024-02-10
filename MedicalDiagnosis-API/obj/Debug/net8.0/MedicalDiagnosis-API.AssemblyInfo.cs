@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MedicalDiagnosis-API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6c21d5c8afcb01e086ea8e2c20156a3f4a5d6d90")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+08260c1bb2b5d2f596d2de8d5badfb3c21e7e601")]
 [assembly: System.Reflection.AssemblyProductAttribute("MedicalDiagnosis-API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MedicalDiagnosis-API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

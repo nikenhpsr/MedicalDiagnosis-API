@@ -7,7 +7,13 @@ namespace MedicalDiagnosis_API.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly MedicalDiagnosisContext _context;
 
+        public HomeController(ILogger<HomeController> logger, MedicalDiagnosisContext context)
+        {
+            _logger = logger;
+            _context = context;
+        }
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;

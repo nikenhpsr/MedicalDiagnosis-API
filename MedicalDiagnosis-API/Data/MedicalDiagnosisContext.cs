@@ -1,12 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
-using System.Numerics;
-
-namespace MedicalDiagnosis_API.Models
+﻿namespace MedicalDiagnosis_API.Models
 {
-    public class ApplicationDbContext : DbContext
+    public class MedicalDiagnosisContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public MedicalDiagnosisContext (DbContextOptions<MedicalDiagnosisContext> options)
             : base(options)
         {
         }
@@ -66,6 +62,18 @@ namespace MedicalDiagnosis_API.Models
                 .HasOne(m => m.Author)
                 .WithMany(d => d.Inspection)
                 .HasForeignKey(m => m.AuthorId);
+
+            // Configuring the one-to-one relationship between MedicalInspectionModel and ConsultationModel
+            modelBuilder.Entity<MedicalInspectionModel>()
+                .HasOne(m => m.Consultation)
+                .WithOne(c => c.MedicalInspection)
+                .HasForeignKey<ConsultationModel>(c => c.MedicalInspectionId);
+
+            // Configuring the one-to-one relationship between ConsultationModel and SpecialityModel
+            modelBuilder.Entity<ConsultationModel>()
+                .HasOne(c => c.Speciality)
+                .WithMany(s => s.Consultations) // Assuming you have a navigation property in SpecialityModel for consultations
+                .HasForeignKey(c => c.SpecialityId);
 
             // Enum conversions
             modelBuilder.Entity<DiagnosisModel>()
