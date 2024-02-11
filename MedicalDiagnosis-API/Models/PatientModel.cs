@@ -11,6 +11,8 @@
         public DateTime? Birthday { get; set; }
         [Required]
         public Gender Gender { get; set; }
+
+        public ICollection<InspectionModel> Inspections { get; set; } = new List<InspectionModel>();
     }
 
 

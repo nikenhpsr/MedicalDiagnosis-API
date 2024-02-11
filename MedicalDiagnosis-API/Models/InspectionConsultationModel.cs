@@ -9,7 +9,8 @@
         public DateTime CreateTime { get; set; } = DateTime.UtcNow;
 
         [Required]
-        public Guid InspectionId { get; set; } // Assuming inspectionId is a UUID
+        public Guid InspectionId { get; set; }
+        public InspectionModel Inspection { get; set; }
 
         [Required]
         public SpecialityModel Speciality { get; set; } // Assuming SpecialityModel is defined
@@ -18,6 +19,9 @@
         public InspectionCommentModel RootComment { get; set; }
 
         public int CommentsNumber { get; set; }
+
+        public Guid ConsultationId { get; set; }
+        public ConsultationModel Consultation { get; set; }
     }
 
 }

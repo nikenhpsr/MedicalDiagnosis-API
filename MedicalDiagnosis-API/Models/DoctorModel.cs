@@ -31,11 +31,13 @@
 
         // Add this collection navigation property
         public virtual ICollection<CommentModel> Comments { get; set; }
+        public virtual ICollection<InspectionModel> Inspections { get; set; }
 
         public DoctorModel()
         {
             // Initialize the Comments collection to prevent null reference exceptions
             Comments = new HashSet<CommentModel>();
+            Inspections = new HashSet<InspectionModel>();
         }
     }
 

@@ -31,8 +31,12 @@
         [Required]
         public PatientModel Patient { get; set; }
 
+        public Guid DoctorId { get; set; }
         [Required]
         public DoctorModel Doctor { get; set; }
+        public Guid PatientId { get; set; }
+
+        public virtual ConsultationModel Consultation { get; set; }
 
         public List<DiagnosisModel> Diagnoses { get; set; } = new List<DiagnosisModel>();
 

@@ -21,6 +21,10 @@
 
         public string Description { get; set; }
 
+        public Guid InspectionModelId { get; set; } // Foreign key property
+        public InspectionModel Inspection { get; set; } // Navigation property
+
+
         [Required]
         public DiagnosisType Type { get; set; }
     }
