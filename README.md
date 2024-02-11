@@ -87,3 +87,4 @@ app.UseSwaggerUI(c =>
 
 12. You can run `dotnet watch run` to show dev mode. Then go into /swagger
 13. Write your Controllers in /Controllers folder
+14. The server should restart everytime you save a changed to a Controller
