@@ -15,11 +15,6 @@ namespace MedicalDiagnosis_API.Controllers
             _logger = logger;
             _context = context;
         }
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         public IActionResult Index()
         {
             return View();
