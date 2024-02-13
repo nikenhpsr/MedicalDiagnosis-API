@@ -15,7 +15,7 @@
         public string Content { get; set; } // Added Content field with constraints
 
         // This is the foreign key property for Doctor
-        public string? AuthorId { get; set; }
+        public Guid? AuthorId { get; set; }
 
         // This is the navigation property to the Doctor class
         public DoctorModel? Author { get; set; }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MedicalDiagnosis_API.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 
 namespace MedicalDiagnosis_API.Controllers
@@ -7,6 +8,7 @@ namespace MedicalDiagnosis_API.Controllers
     [Route("api/dictionary")]
     public class DictionaryController : ControllerBase
     {
+        private readonly MedicalDiagnosisContext _context;
         private readonly List<SpecialityModel> _specialties; // Assume this is populated elsewhere
         private readonly List<Icd10RecordModel> _icdRecords; // Assume this is populated elsewhere
 

@@ -1,3 +1,4 @@
+using MedicalDiagnosis_API.Data;
 using MedicalDiagnosis_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

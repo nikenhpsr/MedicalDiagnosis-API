@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MedicalDiagnosis_API.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalDiagnosis_API.Controllers
 {

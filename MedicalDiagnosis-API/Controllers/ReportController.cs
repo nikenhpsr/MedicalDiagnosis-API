@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MedicalDiagnosis_API.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalDiagnosis_API.Controllers
 {
@@ -6,6 +7,7 @@ namespace MedicalDiagnosis_API.Controllers
     [Route("api/report")]
     public class ReportController : ControllerBase
     {
+        private readonly MedicalDiagnosisContext _context;
         // GET: api/report/icdrootsreport
         [HttpGet("icdrootsreport")]
         public IActionResult GetIcdRootsReport([FromQuery] DateTime start, [FromQuery] DateTime end, [FromQuery] List<string> icdRoots = null)

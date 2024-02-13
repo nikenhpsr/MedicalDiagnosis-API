@@ -1,8 +1,8 @@
-﻿namespace MedicalDiagnosis_API.Models
+﻿namespace MedicalDiagnosis_API.Data
 {
     public class MedicalDiagnosisContext : DbContext
     {
-        public MedicalDiagnosisContext (DbContextOptions<MedicalDiagnosisContext> options)
+        public MedicalDiagnosisContext(DbContextOptions<MedicalDiagnosisContext> options)
             : base(options)
         {
         }
@@ -39,19 +39,11 @@
                 .WithMany() // Assuming no navigation property back to ConsultationModel
                 .HasForeignKey(c => c.SpecialityId);
 
-            // Configuring the one-to-many relationship between ConsultationModel and InspectionModel
-            modelBuilder.Entity<InspectionConsultationModel>()
-                .HasKey(ic => new { ic.InspectionId, ic.ConsultationId });
-
-            modelBuilder.Entity<InspectionConsultationModel>()
-                .HasOne(ic => ic.Inspection)
+            // Configuration for the many-to-many relationship
+            modelBuilder.Entity<ConsultationModel>()
+                .HasMany(c => c.Inspections)
                 .WithMany(i => i.Consultations)
-                .HasForeignKey(ic => ic.InspectionId);
-
-            modelBuilder.Entity<InspectionConsultationModel>()
-                .HasOne(ic => ic.Consultation)
-                .WithMany() // If ConsultationModel doesn't have a navigation property back to InspectionConsultationModel, leave this blank
-                .HasForeignKey(ic => ic.ConsultationId);
+                .UsingEntity(j => j.ToTable("ConsultationInspection"));
 
             // Configuring the one-to-many relationship between DiagnosisModel and MedicalInspection
             modelBuilder.Entity<DiagnosisModel>()
@@ -70,12 +62,6 @@
                 .HasOne(m => m.Doctor)
                 .WithMany(d => d.Inspections)
                 .HasForeignKey(m => m.DoctorId);
-
-            // Configuring the one-to-one relationship between MedicalInspectionModel and ConsultationModel
-            modelBuilder.Entity<InspectionModel>()
-                .HasOne(ic => ic.Consultation)
-                .WithOne(c => c.Inspection)
-                .HasForeignKey<InspectionConsultationModel>(ic => ic.ConsultationId);
 
             // Configuring the one-to-one relationship between ConsultationModel and SpecialityModel
             modelBuilder.Entity<ConsultationModel>()

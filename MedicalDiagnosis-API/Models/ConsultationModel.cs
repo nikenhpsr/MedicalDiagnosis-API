@@ -13,11 +13,8 @@
         // Navigation property for Speciality
         public virtual SpecialityModel Speciality { get; set; }
 
-        //one-to-one relationship with InspectionModel
-        public Guid InspectionId { get; set; }  // Foreign key property
-        public virtual InspectionModel Inspection { get; set; }  // Navigation property
-
         // Collection navigation property for related Comments
         public virtual ICollection<CommentModel> Comments { get; set; } = new List<CommentModel>();
+        public virtual ICollection<InspectionModel> Inspections { get; set; } = new List<InspectionModel>();
     }
 }

@@ -36,11 +36,8 @@
         public DoctorModel Doctor { get; set; }
         public Guid PatientId { get; set; }
 
-        public virtual ConsultationModel Consultation { get; set; }
-
         public List<DiagnosisModel> Diagnoses { get; set; } = new List<DiagnosisModel>();
 
-        public List<InspectionConsultationModel> Consultations { get; set; } = new List<InspectionConsultationModel>();
+        public virtual ICollection<ConsultationModel> Consultations { get; set; } = new List<ConsultationModel>();
     }
-
 }

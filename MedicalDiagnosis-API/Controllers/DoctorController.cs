@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MedicalDiagnosis_API.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalDiagnosis_API.Controllers
 {
@@ -6,6 +7,8 @@ namespace MedicalDiagnosis_API.Controllers
     [Route("api/doctor")]
     public class DoctorController : ControllerBase
     {
+        private readonly MedicalDiagnosisContext _context;
+
         // POST: api/doctor/register
         [HttpPost("register")]
         public IActionResult RegisterDoctor([FromBody] DoctorRegisterModel registerModel)
