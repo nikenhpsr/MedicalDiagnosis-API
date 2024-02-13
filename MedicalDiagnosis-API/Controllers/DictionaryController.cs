@@ -45,32 +45,5 @@ namespace MedicalDiagnosis_API.Controllers
                 pagination = new { size, count = filteredSpecialties.Count, current = page }
             });
         }
-
-        [HttpGet("icd10")]
-        public IActionResult SearchIcd10([FromQuery] string request, [FromQuery] int page = 1, [FromQuery] int size = 5)
-        {
-            var filteredRecords = _icdRecords
-                .Where(r => string.IsNullOrWhiteSpace(request) || r.Name.Contains(request, StringComparison.OrdinalIgnoreCase) || r.Code.Contains(request))
-                .Skip((page - 1) * size)
-                .Take(size)
-                .ToList();
-
-            return Ok(new
-            {
-                records = filteredRecords,
-                pagination = new { size, count = filteredRecords.Count, current = page }
-            });
-        }
-
-        [HttpGet("icd10/roots")]
-        public IActionResult GetIcd10Roots()
-        {
-            // Assuming root ICD-10 elements are those with a code ending in "0"
-            var rootIcdRecords = _icdRecords
-                .Where(r => r.Code.EndsWith("0"))
-                .ToList();
-
-            return Ok(rootIcdRecords);
-        }
     }
 }
