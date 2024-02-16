@@ -1,5 +1,11 @@
 # MedicalDiagnosis-API
 
+### Class Diagram
+
+![class-diagram](./class-diagram.png)
+
+### How to reproduce this API?
+
 Requirement: Make sure you've already installed .NET SDK CLI
 
 1. Open Visual Studio. Create New Project -> Choose C# MVC Web App
